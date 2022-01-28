@@ -10,8 +10,7 @@ const app = express();
 const createServer= () =>
 {
     delete require.cache[require.resolve(fileName)];
-    setTimeout(() =>{
-        router = jsonServer(fileName.endsWith(".js")? require(fileName)():fileName);
+    setTimeout(() =>{router = jsonServer.router(fileName.endsWith(".js") ? require(fileName)():fileName);
     },100)
 
 }
@@ -20,7 +19,7 @@ createServer();
 app.use(cors());
 app.use(jsonServer.bodyParser)
 app.use("/api",(req,resp,next) => router(req,resp,next));
-chokidar.watch(fileName).options('change',()=>{console.log("Reloading web service data..");
+chokidar.watch(fileName).on('change',()=>{console.log("Reloading web service data..");
 createServer();
 console.log("Reloading web service data complete");
 });
